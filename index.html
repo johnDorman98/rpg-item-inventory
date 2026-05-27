@@ -1,11 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RPG Item Inventory</title>
-</head>
-<body>
-  <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RPG Item Inventory</title>
+  </head>
+  <body>
+    <header>
+      <h1>RPG Item Inventory</h1>
+    </header>
+    <main>
+      <button command="show-modal" commandfor="add-item-modal">
+        Add Item
+      </button>
+      <h2>Current inventory</h2>
+      <section class="inventory-container"></section>
+
+      <dialog id="add-item-modal">
+        <h3>Add item details:</h3>
+        <form>
+          <p id="form-feedback">Form feedback placeholder</p>
+          <section class="input-group">
+            <label for="new-item-name">Enter title:</label>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                name="new-item-name"
+                id="new-item-name"
+                required
+              />
+            </div>
+          </section>
+           <button type="submit">Add</button>
+        </form>
+        <button commandfor="add-item-modal" command="close">
+        Close
+      </button>
+      </dialog>
+    </main>
+    <script src="script.js"></script>
+  </body>
 </html>
