@@ -10,18 +10,16 @@
       <h1>RPG Item Inventory</h1>
     </header>
     <main>
-      <button command="show-modal" commandfor="add-item-modal">
-        Add Item
-      </button>
+      <button command="show-modal" commandfor="add-item-modal">Add Item</button>
       <h2>Current inventory</h2>
       <section class="inventory-container"></section>
 
       <dialog id="add-item-modal">
         <h3>Add item details:</h3>
-        <form>
+        <form id="add-item-form">
           <p id="form-feedback">Form feedback placeholder</p>
-          <section class="input-group">
-            <label for="new-item-name">Enter title:</label>
+          <div class="input-group">
+            <label for="new-item-name">Enter Item Name:</label>
             <div class="input-wrapper">
               <input
                 type="text"
@@ -30,12 +28,33 @@
                 required
               />
             </div>
-          </section>
-           <button type="submit">Add</button>
+          </div>
+          <div class="input-group">
+            <label for="new-item-type">Enter Item Type:</label>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                name="new-item-type"
+                id="new-item-type"
+                required
+              />
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="new-item-quantity">Enter Item Quantity:</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                name="new-item-quantity"
+                id="new-item-quantity"
+                required
+                min="0"
+              />
+            </div>
+          </div>
+          <button type="submit">Add</button>
         </form>
-        <button commandfor="add-item-modal" command="close">
-        Close
-      </button>
+        <button commandfor="add-item-modal" command="close">Close</button>
       </dialog>
     </main>
     <script src="script.js"></script>
