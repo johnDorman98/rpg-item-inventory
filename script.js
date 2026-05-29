@@ -48,9 +48,11 @@ function displayInventory(inventory) {
 const inventoryItems = [];
 
 // Handle form submissions.
-const form = document.querySelector("#add-item-form");
+const newItemModal = document.querySelector("#add-item-modal");
+const newItemForm = document.querySelector("#add-item-form");
+const formFeedbackField = document.querySelector("#form-feedback");
 
-form.addEventListener("submit", (event) => {
+newItemForm.addEventListener("submit", (event) => {
   // Prevent default behavior
   event.preventDefault();
 
@@ -66,4 +68,20 @@ form.addEventListener("submit", (event) => {
 
   // Clear and rebuild the visible inventory list on the screen
   displayInventory(inventoryItems);
+
+  formFeedbackField.textContent = "Item added successfully! Closing form.";
+  const submitButton = event.target.querySelector("button[type='submit']")
+  submitButton.disabled = true;
+
+  setTimeout(() => {
+    newItemModal.close();
+    submitButton.disabled = false;
+  }, 2000)
+
 });
+
+// Reset form when modal is closed
+newItemModal.addEventListener("close", (event) => {
+  formFeedbackField.textContent = "";
+  newItemForm.reset();
+})
