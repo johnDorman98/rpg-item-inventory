@@ -8,7 +8,9 @@ function Item(name, type, quantity) {
 
 // Reductions when a player consumes or equips an item
 Item.prototype.useItem = function () {
-  this.quantity -= 1;
+  if (this.quantity > 0) {
+    this.quantity -= 1;
+  }
 };
 
 // Instantiates a new item and adds it to the master collection
@@ -23,10 +25,10 @@ function displayInventory(inventory) {
   const inventoryContainer = document.querySelector(".inventory-container");
   inventoryContainer.textContent = "";
 
-  inventory.forEach(item => {
+  inventory.forEach((item) => {
     // Create a card for each inventory item.
     const inventoryCard = document.createElement("div");
-    inventoryCard.classList.add("inventory-card")
+    inventoryCard.classList.add("inventory-card");
 
     // Create elements to be added to inventory card
     const itemNameElement = document.createElement("h3");
@@ -36,10 +38,15 @@ function displayInventory(inventory) {
     const itemTypeElement = document.createElement("p");
     itemTypeElement.textContent = item.type;
     inventoryCard.appendChild(itemTypeElement);
-    
+
     const itemQuantityElement = document.createElement("p");
     itemQuantityElement.textContent = item.quantity;
     inventoryCard.appendChild(itemQuantityElement);
+
+    const itemUseButton = document.createElement("button");
+    itemUseButton.textContent = "Use";
+    itemUseButton.dataset.id = item.id;
+    inventoryCard.appendChild(itemUseButton);
 
     inventoryContainer.appendChild(inventoryCard);
   });
@@ -47,11 +54,17 @@ function displayInventory(inventory) {
 
 const inventoryItems = [];
 
-// Handle form submissions.
+// Display test Item on page.
+const testItemOne = new Item("Test Item", "Type", 10);
+inventoryItems.push(testItemOne);
+displayInventory(inventoryItems);
+
 const newItemModal = document.querySelector("#add-item-modal");
 const newItemForm = document.querySelector("#add-item-form");
 const formFeedbackField = document.querySelector("#form-feedback");
+const inventoryContainer = document.querySelector(".inventory-container");
 
+// Handle form submissions.
 newItemForm.addEventListener("submit", (event) => {
   // Prevent default behavior
   event.preventDefault();
@@ -70,18 +83,44 @@ newItemForm.addEventListener("submit", (event) => {
   displayInventory(inventoryItems);
 
   formFeedbackField.textContent = "Item added successfully! Closing form.";
-  const submitButton = event.target.querySelector("button[type='submit']")
+
+  // Disable add button to prevent duplicate items.
+  const submitButton = event.target.querySelector("button[type='submit']");
   submitButton.disabled = true;
 
+  // Close and reset form after 2000ms
   setTimeout(() => {
     newItemModal.close();
     submitButton.disabled = false;
-  }, 2000)
-
+  }, 2000);
 });
 
 // Reset form when modal is closed
 newItemModal.addEventListener("close", (event) => {
   formFeedbackField.textContent = "";
   newItemForm.reset();
-})
+});
+
+
+// Handle events within the inventory container to use or delete items.
+inventoryContainer.addEventListener("click", (event) => {
+  // Decrease the items quantity when it is used.
+  if (event.target.matches("button")) {
+    // Locate the used item
+    const usedItemId = event.target.dataset.id;
+    const usedItem = inventoryItems.find((item) => item.id === usedItemId);
+
+    usedItem.useItem();
+
+    // Remove the item if quantity is 0.
+    if (usedItem.quantity === 0) {
+      const usedItemIndex = inventoryItems.findIndex(
+        (item) => item.id === usedItem.id,
+      );
+
+      inventoryItems.splice(usedItemIndex, 1);
+    }
+
+    displayInventory(inventoryItems);
+  }
+});
